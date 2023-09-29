@@ -6,6 +6,7 @@ const favList = document.querySelector('.js-fav-list');
 const inputSearch = document.querySelector('.js-input');
 const btnSearch = document.querySelector('.js-btn-search');
 const btnReset = document.querySelector('.js-btn-reset');
+const msjError = document.querySelector('.js-p');
 
 const urlDefoult = 'https://api.tvmaze.com/search/shows?q=friends';
 
@@ -45,9 +46,12 @@ function searchShow() {
   fetch(urlSearch)
     .then((response) => response.json())
     .then((data) => {
-      listFound = data;
-      console.log(listFound);
-      renderShowList(listFound);
+      if (data.length === 0) {
+        msjError.innerHTML = '¿Por qué no pruebas con otro título?';
+      } else {
+        listFound = data;
+        renderShowList(listFound);
+      }
     });
 }
 
@@ -63,7 +67,7 @@ function renderShow(showData) {
   articleShow.appendChild(tittleShow);
   const imgShow = document.createElement('img');
   if (showData.show.image === null) {
-    imgShow.setAttribute('src', '../assets/images/awesome_cards_logo.png');
+    imgShow.setAttribute('src', '../assets/images/justRainbow.png');
   } else {
     imgShow.setAttribute('src', showData.show.image.medium);
   }
@@ -71,6 +75,14 @@ function renderShow(showData) {
   imgShow.classList.add('img');
   articleShow.appendChild(imgShow);
   articleShow.setAttribute('id', showData.show.id);
+
+  //para cambiar el color de fondo y de fuente
+
+  if (
+    listFavs.findIndex((itemFav) => itemFav.show.id === showData.show.id) !== -1
+  ) {
+    articleShow.classList.add('favColor');
+  }
 
   return articleShow;
 }
@@ -129,17 +141,12 @@ function addEventToShow() {
 
 //función para borrar TODOS los favs de la lista y del local
 
-function handleClickReset(event) {
-    localStorage.removeItem('listFavs');
-    renderShowFavs(listFavs);
+function handleClickReset() {
+  localStorage.removeItem('listFavs');
+  renderShowFavs(listFavs);
+  inputSearch.value = '';
+  foundList.innerHTML = '';
 }
-
-//función para cambiar color de fondo y de letras a los favoritos
-// function colorChange {
-//     if (articleShow) {
-//         articleShow.classList.add('favColor')
-//     }
-// }
 
 //eventos
 

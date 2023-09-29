@@ -5,4 +5,35 @@
   align-items: center;
   gap: 3vh;
   margin-bottom: 3rem;
+  font-family: $font-title;
+  font-size: 1.8rem;
+  color: $color-primary;
+  text-align: center;
+}
+.input{
+  background: rgb(252, 203, 226);
+  border: 1px solid $color-primary;
+  border-radius: 5px 5px;
+  color: $color-primary;
+  font-size: 1.2rem;
+  padding: 5px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+}
+.search, .reset {
+  background-color: #f77fbb;
+  border: none;
+  border-radius: 1.2rem;
+  padding-inline: 2rem;
+  font-weight: 600;
+  margin-bottom: 3vh;
+  color: $color-primary;
+  font-family: $font-main;
+  font-size: 1.2rem;
+  
+  
+}
+.search:hover, .reset:hover{
+  color: $color-secondary;
+  background-color: $color-primary;
 }

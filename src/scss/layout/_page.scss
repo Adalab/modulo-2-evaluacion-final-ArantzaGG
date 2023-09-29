@@ -1,12 +1,19 @@
 body {
   padding: 2rem;
   height: 100vh;
+background-color: $color-bg;
+ 
+  
 }
 
-.page__main{
+.page__main {  
+  
+  height: 80vh;
+  background-image: url('../images/justRainbow.png');
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  font-family: $font-main;
 }
 
 .section {
@@ -17,7 +24,7 @@ body {
   gap: 2vh;
 }
 
-.card{
+.card {
   width: 300px;
   display: flex;
   flex-direction: column;
@@ -27,17 +34,27 @@ body {
   padding-top: 2vh;
   padding-bottom: 3vh;
   background-color: pink;
-  color: purple;
+  color: $color-primary;
+  font-size: 1.2rem;
+  border: solid $color-primary;
+  border-radius: 10%;
 }
 .img {
   height: 295px;
   width: 210px;
-  border: solid purple;
-
+  border: solid $color-primary;
+  border-radius: 10%;
 }
 
 .favColor {
   width: 300px;
-  color: pink;
-  background-color: purple;
+  color: $color-secondary;
+  background-color: $color-primary;
+}
+
+.p {
+  color: red;
+  font-size: 2rem;
+  background-color: yellow;
+
 }
