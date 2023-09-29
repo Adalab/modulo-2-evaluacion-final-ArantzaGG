@@ -9,8 +9,35 @@ body {
   justify-content: space-around;
 }
 
+.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2vh;
+}
+
+.card{
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1vh;
+  padding-top: 2vh;
+  padding-bottom: 3vh;
+  background-color: pink;
+  color: purple;
+}
 .img {
   height: 295px;
   width: 210px;
+  border: solid purple;
 
+}
+
+.favColor {
+  width: 300px;
+  color: pink;
+  background-color: purple;
 }
