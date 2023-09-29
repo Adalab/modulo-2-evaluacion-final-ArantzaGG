@@ -1,7 +1,16 @@
 body {
   padding: 2rem;
   height: 100vh;
-  background-image: url('../images/bg-adalab.png');
-  background-color: $color-bg;
-  font-family: $font-main;
+}
+
+.page__main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.img {
+  height: 295px;
+  width: 210px;
+
 }
