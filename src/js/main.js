@@ -1,5 +1,4 @@
 'use strict';
-
 //queryselector
 const foundList = document.querySelector('.js-found-list');
 const favList = document.querySelector('.js-fav-list');
@@ -8,8 +7,6 @@ const btnSearch = document.querySelector('.js-btn-search');
 const btnReset = document.querySelector('.js-btn-reset');
 const msjError = document.querySelector('.js-p');
 
-const urlDefoult = 'https://api.tvmaze.com/search/shows?q=friends';
-
 //constante para traer los favoritos guardados en el local
 const favoriteStored = JSON.parse(localStorage.getItem('listFavs'));
 
@@ -17,29 +14,18 @@ const favoriteStored = JSON.parse(localStorage.getItem('listFavs'));
 let listFound = [];
 let listFavs = [];
 
-// traer lista de series que aparezcan por defecto
-// fetch(urlDefoult)
-//   .then((response) => response.json())
-//   .then((data) => {
-//     listFound = data;
-//     renderShowList(listFound);
-//   });
-
 //funciones
 
 //función para pintar las favs guardadas en el local storage
-
 function storedFavs() {
-  if (favoriteStored) {
-    renderShowFavs(favoriteStored);
-  } else {
-    renderShowFavs(listFavs);
+  if (favoriteStored !== null) {
+    listFavs = favoriteStored;
+    renderShowFavs(listFavs, favList);
   }
 }
 storedFavs();
 
 // función que trae los datos de la api
-
 function searchShow() {
   const searchValue = inputSearch.value;
   const urlSearch = `https://api.tvmaze.com/search/shows?q=${searchValue}`;
@@ -47,8 +33,10 @@ function searchShow() {
     .then((response) => response.json())
     .then((data) => {
       if (data.length === 0) {
-        msjError.innerHTML = '¿Por qué no pruebas con otro título?';
+        msjError.innerHTML =
+          '¡Ups! No hemos encontrado tu serie. ¿Por qué no pruebas con otro título?';
       } else {
+        msjError.innerHTML = '';
         listFound = data;
         renderShowList(listFound);
       }
@@ -76,12 +64,17 @@ function renderShow(showData) {
   articleShow.appendChild(imgShow);
   articleShow.setAttribute('id', showData.show.id);
 
-  //para cambiar el color de fondo y de fuente
+  //para cambiar el color de fondo y de fuente y añadir botón para quitar de favs
 
   if (
     listFavs.findIndex((itemFav) => itemFav.show.id === showData.show.id) !== -1
   ) {
     articleShow.classList.add('favColor');
+    const btnDelete = document.createElement('button');
+    btnDelete.classList.add('delete_button');
+    const textBtnDelete = document.createTextNode(`X`);
+    btnDelete.appendChild(textBtnDelete);
+    articleShow.appendChild(btnDelete);
   }
 
   return articleShow;
@@ -105,7 +98,6 @@ function handleClickSearch(event) {
 }
 
 //función que añade series a la lista de favoritos
-
 function renderShowFavs(favShows) {
   favList.innerHTML = '';
   for (const item of favShows) {
@@ -133,22 +125,23 @@ function handleClickFav(event) {
 //función para agregar el evento click a las series
 function addEventToShow() {
   const everyShows = document.querySelectorAll('.js-card');
-  console.log(everyShows);
   for (const item of everyShows) {
     item.addEventListener('click', handleClickFav);
   }
 }
 
 //función para borrar TODOS los favs de la lista y del local
-
 function handleClickReset() {
+  listFavs = [];
+  listFound = [];
   localStorage.removeItem('listFavs');
-  renderShowFavs(listFavs);
+  renderShowFavs(listFavs, favList);
+  renderShowList(listFound, foundList);
   inputSearch.value = '';
-  foundList.innerHTML = '';
+  msjError.innerHTML = '';
 }
 
 //eventos
-
+// btnDelete.addEventListener('click', handleDeleteFav);
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);

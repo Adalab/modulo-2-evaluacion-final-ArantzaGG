@@ -8,7 +8,7 @@ background-color: $color-bg;
 
 .page__main {  
   
-  height: 80vh;
+  height: 100vh;
   background-image: url('../images/justRainbow.png');
   display: flex;
   flex-direction: row;
@@ -22,6 +22,7 @@ background-color: $color-bg;
   justify-content: flex-start;
   align-items: center;
   gap: 2vh;
+  
 }
 
 .card {
@@ -38,6 +39,7 @@ background-color: $color-bg;
   font-size: 1.2rem;
   border: solid $color-primary;
   border-radius: 10%;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
 }
 .img {
   height: 295px;
@@ -47,14 +49,23 @@ background-color: $color-bg;
 }
 
 .favColor {
+  
   width: 300px;
   color: $color-secondary;
   background-color: $color-primary;
+  border: solid $color-secondary;
+  .img {
+    border: solid $color-secondary
+  }
 }
 
-.p {
-  color: red;
-  font-size: 2rem;
-  background-color: yellow;
+.delete_button {
+  
+  padding-inline: 6px;
+  padding-bottom: 3px;
+  border-radius: 60%;
+  background-color: $color-secondary;
+  
 
+  
 }
