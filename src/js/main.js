@@ -20,7 +20,10 @@ let listFavs = [];
 function storedFavs() {
   if (favoriteStored !== null) {
     listFavs = favoriteStored;
-    renderShowFavs(listFavs, favList);
+    renderShowFavs(listFavs, true);
+    if (listFavs.length === 0) {
+      localStorage.removeItem('listFavs');
+    }
   }
 }
 storedFavs();
@@ -43,11 +46,11 @@ function searchShow() {
     });
 }
 
-//función que pinta una serie
-function renderShow(showData) {
+//función que pinta una serie (el segundo parámetro es para el botón)
+function renderShow(showData, favX) {
   const articleShow = document.createElement('article');
   articleShow.classList.add('card');
-  articleShow.classList.add('js-card');
+
   const tittleShow = document.createElement('h3');
   tittleShow.classList.add('tittle');
   const textTittle = document.createTextNode(showData.show.name);
@@ -70,21 +73,29 @@ function renderShow(showData) {
     listFavs.findIndex((itemFav) => itemFav.show.id === showData.show.id) !== -1
   ) {
     articleShow.classList.add('favColor');
+  }
+
+  //para añadir la x solo cuando está en el array de favoritos, lo pasaremos como parámetro en la función de renderizar la lista
+  if (favX) {
     const btnDelete = document.createElement('button');
     btnDelete.classList.add('delete_button');
+    btnDelete.classList.add('js-btn-delete');
     const textBtnDelete = document.createTextNode(`X`);
     btnDelete.appendChild(textBtnDelete);
     articleShow.appendChild(btnDelete);
+    btnDelete.setAttribute('id', showData.show.id);
   }
-
+  if (!favX) {
+    articleShow.classList.add('js-card');
+  }
   return articleShow;
 }
 
 //función que pinta una lista de series
-function renderShowList(listFound) {
+function renderShowList(listFound, favX) {
   foundList.innerHTML = '';
   for (const oneShow of listFound) {
-    foundList.appendChild(renderShow(oneShow));
+    foundList.appendChild(renderShow(oneShow, favX));
   }
 
   //esta función añade el evento click a las series
@@ -98,13 +109,15 @@ function handleClickSearch(event) {
 }
 
 //función que añade series a la lista de favoritos
-function renderShowFavs(favShows) {
+function renderShowFavs(favShows, favX) {
   favList.innerHTML = '';
   for (const item of favShows) {
-    favList.appendChild(renderShow(item));
+    favList.appendChild(renderShow(item, favX));
   }
   addEventToShow();
+  addEventBtnDelete();
 }
+
 // función que hace que al hacer click, coja la serie seleccionada y la meta o la saque de la lista de favoritos
 function handleClickFav(event) {
   const idShowClicked = parseInt(event.currentTarget.id);
@@ -114,11 +127,21 @@ function handleClickFav(event) {
   if (indexFav === -1) {
     listFavs.push(showFavorite);
   } else {
-    listFavs.splice(indexFav, 1);
+    handleDeleteFav();
   }
 
-  renderShowList(listFound);
-  renderShowFavs(listFavs);
+  renderShowList(listFound, false);
+  renderShowFavs(listFavs, true);
+  localStorage.setItem('listFavs', JSON.stringify(listFavs));
+}
+
+//función manejadora para el botón de borrar de favs
+function handleDeleteFav(event) {
+  const idBtnDelete = parseInt(event.currentTarget.id);
+  const indexFav = listFavs.findIndex((item) => item.show.id === idBtnDelete);
+  listFavs.splice(indexFav, 1);
+  renderShowList(listFound, false);
+  renderShowFavs(listFavs, true);
   localStorage.setItem('listFavs', JSON.stringify(listFavs));
 }
 
@@ -130,18 +153,25 @@ function addEventToShow() {
   }
 }
 
+//función para agregar el evento click al botón de borrar
+function addEventBtnDelete() {
+  const everyButton = document.querySelectorAll('.js-btn-delete');
+  for (const item of everyButton) {
+    item.addEventListener('click', handleDeleteFav);
+  }
+}
+
 //función para borrar TODOS los favs de la lista y del local
 function handleClickReset() {
   listFavs = [];
   listFound = [];
   localStorage.removeItem('listFavs');
-  renderShowFavs(listFavs, favList);
-  renderShowList(listFound, foundList);
+  renderShowFavs(listFavs, true);
+  renderShowList(listFound, false);
   inputSearch.value = '';
   msjError.innerHTML = '';
 }
 
 //eventos
-// btnDelete.addEventListener('click', handleDeleteFav);
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
