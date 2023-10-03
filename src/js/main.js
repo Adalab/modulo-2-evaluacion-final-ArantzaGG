@@ -6,6 +6,7 @@ const inputSearch = document.querySelector('.js-input');
 const btnSearch = document.querySelector('.js-btn-search');
 const btnReset = document.querySelector('.js-btn-reset');
 const msjError = document.querySelector('.js-p');
+const button = document.querySelector('.button');
 
 //constante para traer los favoritos guardados en el local
 const favoriteStored = JSON.parse(localStorage.getItem('listFavs'));
@@ -50,12 +51,15 @@ function searchShow() {
 function renderShow(showData, favX) {
   const articleShow = document.createElement('article');
   articleShow.classList.add('card');
-
   const tittleShow = document.createElement('h3');
   tittleShow.classList.add('tittle');
   const textTittle = document.createTextNode(showData.show.name);
   tittleShow.appendChild(textTittle);
   articleShow.appendChild(tittleShow);
+  const pstatus = document.createElement('h4');
+  const textStatus = document.createTextNode(showData.show.status);
+  pstatus.appendChild(textStatus);
+  articleShow.appendChild(pstatus);
   const imgShow = document.createElement('img');
   if (showData.show.image === null) {
     imgShow.setAttribute('src', '../assets/images/justRainbow.png');
@@ -171,7 +175,13 @@ function handleClickReset() {
   inputSearch.value = '';
   msjError.innerHTML = '';
 }
+function handleClickLog() {
+  for (const item of listFavs) {
+    console.log(item.show.name);
+  }
+}
 
 //eventos
+button.addEventListener('click', handleClickLog);
 btnSearch.addEventListener('click', handleClickSearch);
 btnReset.addEventListener('click', handleClickReset);
